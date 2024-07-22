@@ -1,0 +1,175 @@
+factorx: 24.0
+factory: 24.0
+items: [
+  title: 'Favorite Applications'
+  items: [
+    title: 'Editors'
+    icon: 'shell32.dll,1'
+    items: [
+      title: 'Notepad'
+      path: 'notepad', 
+      
+      title: 'WordPad'
+      path: 'write'
+      ], 
+    
+    title: 'Browsers'
+    icon: 'shell32.dll,13'
+    items: [
+      title: 'Microsoft Edge'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Edge.lnk', 
+      
+      title: 'Google Chrome'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk'
+      ], 
+    
+    title: 'Office'
+    icon: 'imageres.dll,249'
+    items: [
+      title: 'Word'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Word.lnk', 
+      
+      title: 'Excel'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Excel.lnk', 
+      
+      title: 'PowerPoint'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PowerPoint.lnk'
+      ], 
+    
+    title: 'Disk Utilities'
+    icon: 'shell32.dll,7'
+    items: [
+      title: 'Disk Cleanup'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Disk Cleanup.lnk', 
+      
+      title: 'Recovery Drive'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\RecoveryDrive.lnk', 
+      
+      title: 'Defrag'
+      path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\dfrgui.lnk', 
+      
+      title: 'System Information'
+      path: 'msinfo32'
+      ]
+    ], 
+  
+  title: 'Wheel Top Menu'
+  edgeup: true
+  nomnemonic: true
+  items: [
+    special: 'recentmenu'
+    title: 'Recent Items'
+    icon: 'shell32.dll,24', 
+    
+    special: 'separator', 
+    
+    title: 'Shows Desktop'
+    path: 'C:\Users\khchen\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Shows Desktop.lnk', 
+    
+    title: 'Run'
+    path: 'explorer.exe'
+    arg: 'Shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}'
+    icon: 'imageres.dll,95', 
+    
+    special: 'separator', 
+    
+    title: 'Microsoft Edge'
+    path: 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Edge.lnk', 
+    
+    title: 'Command Line'
+    path: 'cmd', 
+    
+    title: 'Script Demo: Send Key A-Z'
+    icon: 'accessibilitycpl.dll,5'
+    script: "import wAuto\r\nimport time\r\ntime.sleep(500)\r\nwAuto.opt(\"SendKeyDelay\", 0)\r\nwAuto.send(\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\")"
+    hotkey: 'Ctrl + Alt + Shift + F12', 
+    
+    special: 'separator', 
+    
+    title: 'Use mouse wheel or Page Up/Page Down keys to switch menus'
+    show: 'disable'
+    ], 
+  
+  title: 'Windows'
+  items: [
+    title: 'Shows Desktop'
+    path: 'C:\Users\khchen\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Shows Desktop.lnk', 
+    
+    title: 'Window Switcher'
+    path: 'C:\Users\khchen\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\Window Switcher.lnk', 
+    
+    special: 'separator', 
+    
+    title: 'Windows'
+    path: '%windir%', 
+    
+    title: 'System32'
+    path: '%systemroot%\system32', 
+    
+    title: 'Temp'
+    path: '%temp%', 
+    
+    title: 'Downloads'
+    path: '%USERPROFILE%\Downloads'
+    mode: 'dirmenu', 
+    
+    special: 'separator', 
+    
+    title: 'Command Line'
+    path: 'cmd', 
+    
+    title: 'Calculator'
+    path: 'calc'
+    hotkey: 'Win + C', 
+    
+    title: 'Notepad'
+    path: 'notepad'
+    hotkey: 'Win + N', 
+    
+    title: 'Explorer'
+    path: 'explorer'
+    arg: ',e'
+    ], 
+  
+  title: 'System Menu'
+  trayleft: true
+  trayhover: true
+  notitle: true
+  nomnemonic: true
+  expand: true
+  items: [
+    special: 'about'
+    title: 'About'
+    icon: 'shell32.dll,23', 
+    
+    special: 'separator', 
+    
+    special: 'recentmenu'
+    title: 'Recent Items'
+    icon: 'shell32.dll,24', 
+    
+    special: 'hotkeymenu'
+    title: 'Hotkey List'
+    icon: 'shell32.dll,211', 
+    
+    special: 'search'
+    title: 'Search'
+    icon: 'shell32.dll,22'
+    hotkey: 'Win + F', 
+    
+    special: 'setting'
+    title: 'Menu Setting'
+    icon: 'shell32.dll,21', 
+    
+    special: 'separator', 
+    
+    special: 'exit'
+    title: 'Exit'
+    icon: 'shell32.dll,27', 
+    
+    title: 'New Node'
+    script: 'echo 123'
+    recent: 1
+    select: true
+    ]
+  ]
