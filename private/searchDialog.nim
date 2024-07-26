@@ -322,7 +322,8 @@ proc searchDialog*(owner: wFrame): SearchParam =
 when isMainModule:
   import pkg/wNim/wMessageDialog
 
-  staticLoadLang(staticRead("../InstantMenu.lang"))
+  const dir = currentSourcePath().parentDir()
+  staticLoadLang(staticRead(dir / "../bin/InstantMenu.lang"))
   staticInitLang("正體中文")
 
   App(wSystemDpiAware)

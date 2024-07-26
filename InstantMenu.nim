@@ -6,8 +6,7 @@
 #====================================================================
 
 # Todo:
-#   parse the links
-#   hint to insert system menu if menu is empty
+#   option to redirect io
 #   add more help function to write script
 #     (preivew? choice editor? run in cmd or powershell?)
 
@@ -281,6 +280,9 @@ const
     # $TrayLeftDouble: "Tray_Left_Double",
     # $TrayRightDouble: "Tray_Right_Double"
   }
+
+  SingleInstanceMutexName = "__InstantMenu__SingleInstance__"
+  ShowMainMessageName = "__InstantMenu__ShowMain__"
 
 var main {.global.} = Main()
 
@@ -2745,6 +2747,26 @@ wClass(wMainFrame of wFrame):
           name: !Paste
         )
 
+  proc doParseLink(self: wMainFrame) =
+    self.withFocusedNode:
+      if node.attribs{"path"}.extPart.toLowerAscii == ".lnk":
+        var newNode = node.copy()
+        let shortcut = newNode.attribs{"path"}.extractShortcut()
+        newNode.attribs["path"] = shortcut.path
+        newNode.attribs["dir"] = shortcut.dir
+        newNode.attribs["arg"] = shortcut.arg
+        newNode.attribs["icon"] = shortcut.icon
+        newNode.attribs["mode"] = shortcut.show
+        newNode.attribs["hotkey"] = wHotkeyToString(shortcut.hotkey)
+        standardize(newNode)
+
+        self.act Action(
+          kind: AddBelow,
+          node: newNode,
+          target: node,
+          name: !Add_Node
+        )
+
   proc doAddMenu(self: wMainFrame) =
     self.withFocusedNode:
       if node.nkind() == TopNode:
@@ -3445,6 +3467,7 @@ wClass(wMainFrame of wFrame):
       type MenuID = enum
         AddMenu = 1, InsertNode, AddNode, AddSeparator
         ImportDirAndFiles, ImportStartMenu, ImportQuickLaunch, ImportSystemMenu
+        ParseLink
 
       let menu = Menu()
       self.withFocusedNode:
@@ -3466,6 +3489,11 @@ wClass(wMainFrame of wFrame):
       menu.append(ImportQuickLaunch, !Import_Quick_Launch).enable(not main.busy)
       menu.append(ImportSystemMenu, !Import_System_Menu).enable(not main.busy)
 
+      self.withFocusedNode:
+        if node.attribs{"path"}.extPart.toLowerAscii == ".lnk":
+          menu.appendSeparator()
+          menu.append(ParseLink, !Parse_Link)
+
       let pos = (0, self.mButtonNew.size.height)
       var flag = wPopMenuTopAlign or wPopMenuReturnId
       if hover: flag = flag or wPopMenuHover
@@ -3481,6 +3509,7 @@ wClass(wMainFrame of wFrame):
       of ImportStartMenu: self.doImportStartMenu()
       of ImportQuickLaunch: self.doImportQuickLaunch()
       of ImportSystemMenu: self.doImportSystemMenu()
+      of ParseLink: self.doParseLink()
       else: discard
 
     self.mButtonNew.wEvent_MouseHover do (): self.newMenu(hover=true)
@@ -3488,6 +3517,18 @@ wClass(wMainFrame of wFrame):
     self.mButtonCopy.wEvent_Button do (): self.doCopy()
     self.mButtonPaste.wEvent_Button do (): self.doPaste()
     self.mButtonDel.wEvent_Button do (): self.doDelete()
+
+    self.mTreeCtrl.wEvent_Char do (event: wEvent):
+      if event.ctrlDown and not (event.shiftDown or event.altDown or event.winDown):
+        case event.keyCode
+        of 3: # Ctrl + C
+          self.doCopy()
+          return
+        of 22: # Ctrl + V
+          self.doPaste()
+          return
+        else: discard
+      event.skip()
 
   proc enableArrowKeys(self: wMainFrame) =
     self.mButtonUp.wEvent_Button do ():
@@ -3694,6 +3735,11 @@ wClass(wMainFrame of wFrame):
         showHotkey: false,
         showIcon: true
       )
+
+    let globalShowMainMessage = RegisterWindowMessage(ShowMainMessageName)
+    self.globalShowMainMessage do ():
+      EndMenu()
+      self.queueMessage(wEvent_ShowMain)
 
   proc enableMouseEvents(self: wMainFrame) =
 
@@ -4466,6 +4512,18 @@ wClass(wMainFrame of wFrame):
 
 proc start() =
   disableWin64Redirection()
+
+  when defined(script):
+    if paramCount() != 0:
+      App(wSystemDpiAware)
+      instantVmCli()
+      quit()
+
+  CreateMutex(nil, false, SingleInstanceMutexName)
+  if GetLastError() == ERROR_ALREADY_EXISTS:
+    SendMessage(HWND_BROADCAST, RegisterWindowMessage(ShowMainMessageName), 0, 0)
+    quit()
+
   main.init()
   main.cacheFile = appDir() / "InstantMenu.cache"
   main.configFile = appDir() / "InstantMenu.ura"

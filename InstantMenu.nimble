@@ -6,7 +6,7 @@
 #====================================================================
 
 # Package
-version       = "0.2.0"
+version       = "0.3.0"
 author        = "Ward"
 description   = "InstantMenu - A Portable Launcher Tool for Windows"
 license       = "MIT"
@@ -32,4 +32,5 @@ task bin, "Build the program":
   # --mm:orc --exceptions:setjmp: The compilation time and file size is normal,
   # but the program occasionally exits unexpectedly when an exception occurs.
   # Using --mm:refc seems to be an inevitable choice.
-  exec "nim c --mm:refc -d:script -d:release -d:strip --app:gui --opt:speed -d:danger -d:lto -o:bin/InstantMenu InstantMenu.nim"
+  # both -d:lto and -d:danger casue some problems
+  exec "nim c --mm:refc -d:script -d:release -d:strip --app:gui --opt:size -o:bin/InstantMenu InstantMenu.nim"

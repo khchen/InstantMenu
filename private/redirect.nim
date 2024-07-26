@@ -17,10 +17,10 @@ type
     write*: HANDLE
 
 proc c_open_osfhandle(osfhandle: int, flags: cint): cint
-  {.importc: "_open_osfhandle", header: "<stdio.h>", discardable.}
+  {.importc: "_open_osfhandle", header: "<io.h>", discardable.}
 
 proc c_dup2(fd1: cint, fd2: cint): cint
-  {.importc: "_dup2", header: "<stdio.h>".}
+  {.importc: "_dup2", header: "<io.h>".}
 
 proc c_fileno(stream: File): cint
   {.importc: "_fileno", header: "<stdio.h>".}
